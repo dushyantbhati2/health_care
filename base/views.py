@@ -71,7 +71,7 @@ class PatientView(APIView):
         try:
             patient = get_object_or_404(Patient, pk=pk, user=request.user)
             patient.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response({"success":"Patient deleted successfully"},status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -117,7 +117,7 @@ class DoctorView(APIView):
         try:
             doctor = get_object_or_404(Doctor, pk=pk)
             doctor.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response({"success":"doctor deleted successfully"},status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -131,7 +131,7 @@ class MappingCreateView(APIView):
             if patient_id is None:
                 mappings = PatientDoctorMapping.objects.all()
             else:
-                mappings = PatientDoctorMapping.objects.filter(id=patient_id)
+                mappings = PatientDoctorMapping.objects.filter(patient__id=patient_id)
             serializer = PatientDoctorMappingSerializer(mappings, many=True)
             return Response(serializer.data)
         except Exception as e:
@@ -146,16 +146,11 @@ class MappingCreateView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-
-class MappingDeleteView(APIView):
-    authentication_classes = [JWTAuthentication]
-    permission_classes = [IsAuthenticated]
-
     def delete(self, request, pk):
         try:
             mapping = get_object_or_404(PatientDoctorMapping, pk=pk)
             mapping.delete()
-            return Response(status=status.HTTP_204_NO_CONTENT)
+            return Response({"success":"Mapping deleted successfully"},status=status.HTTP_204_NO_CONTENT)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+

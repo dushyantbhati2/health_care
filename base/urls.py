@@ -9,6 +9,6 @@ urlpatterns = [
     path('doctors/<uuid:pk>/',views.DoctorView.as_view()),
     path('mappings/',views.MappingCreateView.as_view()),
     path('mappings/<uuid:patient_id>/',views.MappingCreateView.as_view()),
-    path('mappings/<uuid:pk>/',views.MappingDeleteView.as_view()),
+    path('mappings/<int:pk>/',views.MappingCreateView.as_view()),
 
 ]
